@@ -22,20 +22,20 @@ module.exports = class IBMiContent {
    * @param {string} remotePath 
    * @param {string} localPath 
    */
-  async downloadStreamfile(remotePath, localPath = null) {
+  async downloadStreamfile(remotePath, localPath = null, encoding = `utf8`) {
     const client = this.ibmi.client;
 
     if (localPath == null) localPath = await tmpFile();
     await client.getFile(localPath, remotePath);
-    return readFileAsync(localPath, `utf8`);
+    return readFileAsync(localPath, encoding);
   }
 
-  async writeStreamfile(remotePath, content) {
+  async writeStreamfile(remotePath, content, encoding = `utf8`) {
     const client = this.ibmi.client;
     let tmpobj = await tmpFile();
 
-    await writeFileAsync(tmpobj, content, `utf8`);
-    return client.putFile(tmpobj, remotePath); // assumes streamfile will be UTF8
+    await writeFileAsync(tmpobj, content, encoding);
+    return client.putFile(tmpobj, remotePath);
   }
 
   /**
